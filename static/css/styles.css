@@ -1,0 +1,15 @@
+.nav .top-bar .button{
+	padding: 0.5em;
+}
+
+.container{
+	padding-top: 1.5em;
+}
+
+.form.login{
+	margin-top: 2.5em;
+}
+
+.radius {
+	border-radius: 5px;
+}

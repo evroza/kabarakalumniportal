@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="form login">
+	<form method="post" action="/login_authenticate">
+		<div class="row">
+			<div class="small-6 small-centered columns">
+				<h2 class="text-center">Login</h2>
+				<label>Your Usename
+					<input name="username" type="text" placeholder="username" value="{{ username }}">
+				</label>
+				<label>Password
+					<input name="password" type="text" placeholder="password">
+				</label>
+				<input class="button expanded" type="submit"> 
+				{% with messages = get_flashed_messages() %}
+					{% for message in messages %}
+						<div class="alert callout radius" data-closable>
+							<p>{{ message }}</p>
+							<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					{% endfor %}
+				{% endwith %}
+			</div>
+		</div>
+	</form>
+</div>
+
+
+{% endblock %}
