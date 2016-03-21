@@ -1,2 +1,3 @@
 #Ignore the .gitignore directory and everything in it
 venv/
+.idea/
