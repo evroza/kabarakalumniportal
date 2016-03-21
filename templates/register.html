@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="form login" ng-controller="registerCTRL">
+	<form method="post" ng-submit="registerFunction()">
+		<div class="row">
+			<div class="small-6 small-centered columns">
+				<h2 class="text-center">Register</h2>
+				<label>Username
+					<input ng-model="user.Username" name="username" type="text" placeholder="username">
+				</label>
+				<!-- Displays whether the supplied username is available for selection or already taken -->
+				<div class="check-username" ng-bind="user.username_availability"></div>
+				<label>Email
+					<input ng-model="user.Email" name="email" type="text" placeholder="xyz@gmahoo.com">
+				</label>
+				<label>First Name
+					<input ng-model="user.FirstName" name="firstname" type="text" placeholder="John">
+				</label>
+				<label>Last Name
+					<input ng-model="user.LastName" name="lastname" type="text" placeholder="Deere">
+				</label>
+				<label>National ID
+					<input ng-model="user.NationalID" name="nationalid" type="text" placeholder="12345678">
+				</label>
+
+			</div>
+		</div>
+	</form>
+</div>
+
+{% endblock %}

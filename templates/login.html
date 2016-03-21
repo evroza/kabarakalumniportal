@@ -1,27 +1,25 @@
 {% extends "layout.html" %} {% block body %}
 
-<div class="form login">
-	<form method="post" action="/login_authenticate">
+<div class="form login" ng-controller="loginCTRL">
+	<form method="post" ng-submit="loginFunction()">
 		<div class="row">
 			<div class="small-6 small-centered columns">
 				<h2 class="text-center">Login</h2>
 				<label>Your Usename
-					<input name="username" type="text" placeholder="username" value="{{ username }}">
+					<input ng-model="user.username" name="username" type="text" placeholder="username">
 				</label>
 				<label>Password
-					<input name="password" type="text" placeholder="password">
+					<input ng-model="user.password" name="password" type="password" placeholder="password">
 				</label>
-				<input class="button expanded" type="submit"> 
-				{% with messages = get_flashed_messages() %}
-					{% for message in messages %}
-						<div class="alert callout radius" data-closable>
-							<p>{{ message }}</p>
-							<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-					{% endfor %}
-				{% endwith %}
+				<input class="button expanded" type="submit">
+				<div class=" text-center text-spaced register-notice">Want to <a class="register-link warning" href="/register">register</a> instead?</div>
+				
+				<div ng-show="messages.error" class="alert callout radius" data-closable>
+					<p ng-bind="messages.alert"></p>
+					<button ng-click="toggleError()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</form>

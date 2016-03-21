@@ -1,15 +1,23 @@
-.nav .top-bar .button{
+.nav .top-bar .button {
 	padding: 0.5em;
 }
 
-.container{
+.container {
 	padding-top: 1.5em;
 }
 
-.form.login{
+.form.login {
 	margin-top: 2.5em;
 }
 
 .radius {
 	border-radius: 5px;
+}
+
+.text-spaced {
+	word-spacing: 0.15em;
+}
+
+.register-link{
+	color: firebrick;
 }
