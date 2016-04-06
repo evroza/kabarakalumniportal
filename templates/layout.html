@@ -40,12 +40,18 @@
 			</div>
 			<div class="top-bar-right">
 				<ul class="menu">
-					<li>
-						<a href="/login">login</a>
-					</li>
-					<li>
-						<a class="button hollow radius" href="/register">register</a>
-					</li>
+					{% if not session["idUsers"] %}
+						<li>
+							<a href="/login">login</a>
+						</li>
+						<li>
+							<a class="button hollow radius" href="/register">register</a>
+						</li>
+					{% else %}
+						<li>
+							<a class="button radius alert" href="/logout">logout</a>
+						</li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>

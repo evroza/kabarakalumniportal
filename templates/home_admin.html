@@ -1,0 +1,119 @@
+{% extends "layout.html" %} {% block body%}
+
+<div class="container-wide" ng-controller="adminHomeCTRL">
+
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | admin</strong> <span class="underline"></span></div>
+	</div>
+	<!-- Will display error/success messages -->
+	<div class="row">
+		<div class="colums medium-12">
+			<div ng-show="user.message.display" ng-class="user.message.type" class="callout radius" data-closable>
+				<p ng-bind="user.message.content"></p>
+				<button ng-click="toggleAlert()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="columns medium-3">
+			<!-- Displays all reistered users-->
+			<!-- Tab links -->
+			<ul class="tabs" data-tabs id="users-tabs">
+				<li class="tabs-title is-active">
+					<a href="#panel1" aria-selected="true">
+						Verified
+					</a>
+				</li>
+				<li class="tabs-title">
+					<a href="#panel2">
+						Pending
+					</a>
+				</li>
+			</ul>
+			<!-- Tabs content -->
+			<div class="tabs-content" data-tabs-content="users-tabs">
+				<div class="tabs-panel is-active" id="panel1">
+					<ul>
+						<li ng-repeat=" (Username, NationalID) in users.verified"> {[ Username + " -- " + NationalID ]}</li>
+					</ul>
+					<a href="/admin_registered_users" class="float-right">More ...</a>
+				</div>
+				<div class="tabs-panel" id="panel2">
+					<ul>
+						<li ng-repeat=" (Username, NationalID) in users.pending"> {[ Username + " -- " + NationalID ]}</li>
+					</ul>
+					<a href="/admin_pending_users" class="float-right">More ...</a>
+				</div>
+			</div>
+
+		</div>
+		<div class="columns medium-9">
+			<!-- Will hold main content for this page i.e The various discussions, events and jobs in seprate cascaded panels -->
+			<div class="panels discusions">
+				<div class="row">
+					<div class="columns medium-12">
+						<!-- A panel -->
+						<div class="panel" id="announcements">
+							<div class="title text-center">
+								<h3> <a href="/announcements_main">Announcements</a></h3></div>
+							<div class="content">
+
+								<ol class="announcements-short-list">
+									<li ng-repeat="discussion in users.discussions | filter:discussions.announcements | limitTo:5" id="announcement-{[discussion[2]]}">
+										<a ng-bind="discussion[5]" href="/single_post_{[discussion[2]]}"></a> by <span>{[discussion[1] + " - " + discussion[7]]}</span> {[" -- " + discussion[6] | limitText]}</li>
+								</ol>
+							</div>
+						</div>
+						<!-- /End panel -->
+						<!-- A panel -->
+						<div class="panel" id="recent-dicussions">
+							<div class="title text-center">
+								<h3><a href="/dicsussions_main">Recent Discussions</a></h3></div>
+							<div class="content">
+								<ol class="discussions-short-list">
+									<li ng-repeat="discussion in users.discussions | limitTo:5" id="discussion-{[discussion[2]]}">
+										<a ng-bind="discussion[5]" href="/single_post_{[discussion[2]]}"></a> by <span>{[discussion[1] + " - " + discussion[7]]}</span> {[" -- " + discussion[6] | limitText]}</li>
+								</ol>
+							</div>
+						</div>
+						<!-- /End panel -->
+						<!-- A panel -->
+						<div class="panel" id="events">
+							<div class="title text-center">
+								<h3><a href="/events_main">Events</a></h3></div>
+							<div class="content">
+								<ol class="events-short-list">
+									<li ng-repeat="event in users.events | limitTo:5" id="event-{[event[2]]}">
+										<a ng-bind="event[3]" href="/single_event_{[event[1]]}"></a> by <span> {[event[0] + " - " + event[7]]}</span> {[" -- " + event[4] | limitText]}</li>
+								</ol>
+							</div>
+						</div>
+						<!-- /End panel -->
+						<!-- A panel -->
+						<div class="panel" id="jobs">
+							<div class="title text-center">
+								<h3><a href="/jobs_main">Jobs</a></h3></div>
+							<div class="content">
+								<ol class="jobs-short-list">
+									<li ng-repeat="job in users.discussions | filter:discussions.jobs | limitTo:5" id="job-{[job[2]]}">
+										<a ng-bind="job[5]" href="/single_post_{[job[2]]}"></a> by <span> {[job[1] + " - " + job[7]]}</span> {[" -- " + job[6] | limitText]}</li>
+								</ol>
+							</div>
+						</div>
+						<!-- /End panel -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+{% endblock %}

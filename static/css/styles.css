@@ -6,8 +6,19 @@
 	padding-top: 1.5em;
 }
 
-.form.login {
-	margin-top: 2.5em;
+.container-wide {
+	max-width: 110em;
+	border: 3px black;
+	margin: 0 2em;
+}
+
+.container-wide > .row {
+	max-width: 100%;
+}
+
+.form.login,
+.form.register {
+	margin: 2.5em 1em 2.5em 1em;
 }
 
 .radius {
@@ -18,6 +29,168 @@
 	word-spacing: 0.15em;
 }
 
-.register-link{
+.register-link {
 	color: firebrick;
+}
+
+.form.register input[type="text"],
+.form.register input[type="email"],
+.form.register input[type="submit"],
+.form.login input[type="text"],
+.form.login input[type="submit"],
+.form.login input[type="email"],
+.form.login input[type="password"] {
+	border-radius: 5px;
+}
+
+.input-valid {
+	border: 1px solid #1D9A1B;
+}
+
+.input-invalid {
+	border: 1px solid #9A1B1B;
+}
+
+.input-invalid-after:after {
+	content: "\2718";
+	position: absolute;
+	left: 32.7em;
+	top: 1.7em;
+	z-index: 1;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #9A1B1B;
+}
+
+.label {
+	position: relative;
+}
+
+.input-valid-after:after {
+	content: "\2714";
+	position: absolute;
+	left: 32.7em;
+	top: 1.7em;
+	z-index: 1;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #1D9A1B;
+}
+
+.callout.success,
+.callout.alert {
+	padding: 2px 0px 2px 2px;
+	overflow: hidden;
+}
+
+.callout.success p,
+.callout.alert p {
+	position: relative;
+	left: 2px;
+	top: 2px;
+	padding: 2px 0px 2px 2px;
+}
+
+.form.register form label {
+	position: relative;
+}
+
+a[href="/logout"] {
+	margin-right: 1em;
+}
+
+#logged-in-details {
+	position: relative;
+}
+
+#logged-in-details span.underline {
+	position: relative;
+	top: 30px;
+	left: 25em;
+	width: 25.5em;
+	background-color: black;
+	height: 2px;
+	-webkit-animation: 2.5s infinite alternate wobble;
+	animation: 2.5s infinite alternate wobble;
+}
+
+@-webkit-keyframes wobble {
+	0% {
+		width: 25.5em;
+	}
+	100% {
+		width: 35em;
+	}
+}
+
+@keyframes wobble {
+	0% {
+		width: 25.5em;
+	}
+	100% {
+		width: 35em;
+	}
+}
+
+.tabs-title>a {
+	background-color: #3adb76;
+	color: black
+}
+
+.tabs-title>a:focus {
+	background-color: #2199e8;
+	cursor: pointer;
+}
+
+.tabs-title.is-active {
+	background-color: #3adb76;
+}
+
+.tabs-content[data-tabs-content="users-tabs"] {
+	padding-bottom: 1em;
+}
+
+.panels .panel {
+	min-height: 16em;
+	border: 2px solid #B9B9B9;
+	margin-top: 0.5em;
+	border-radius: 5px;
+	position: relative;
+}
+
+.panels .panel .title {
+	border-bottom: 1px solid #e6e6e6;
+}
+
+.panels .panel .content {
+	padding: 0 1em;
+}
+
+.panels .panel .more-link {
+	position: relative;
+	margin: 0 auto;
+	bottom: 1em;
+	left: 35em;
+	font-weight: 700;
+	margin-top: 1em;
+}
+
+.panels .panel .more-link:hover {
+	font-weight: 100;
+	color: #3adb76;
+}
+
+.announcements-short-list li,
+.events-short-list li,
+.jobs-short-list li,
+.discussions-short-list li {
+	margin: 0.5em 0em;
+}
+
+.panels .panel .content span {
+	font-weight: 700;
+}
+
+.panels .panel .content a{
+	text-transform: uppercase;
 }

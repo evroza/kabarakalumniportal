@@ -1,17 +1,27 @@
 {% extends "layout.html" %} {% block body %}
 
-<div class="form login" ng-controller="registerCTRL">
+<div class="form register" ng-controller="registerCTRL">
 	<form method="post" ng-submit="registerFunction()">
 		<div class="row">
-			<div class="small-6 small-centered columns">
+			<div class="medium-6 medium-centered columns">
 				<h2 class="text-center">Register</h2>
-				<label>Username
-					<input ng-model="user.Username" name="username" type="text" placeholder="username">
-				</label>
+
 				<!-- Displays whether the supplied username is available for selection or already taken -->
-				<div class="check-username" ng-bind="user.username_availability"></div>
+				<div ng-show="user.message.display" ng-class="user.message.type" class="callout radius" data-closable>
+					<p ng-bind="user.message.content"></p>
+					<button ng-click="toggleError()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<label>Username
+					<input ng-model="user.Username" ng-model-options="{ updateOn: 'default blur', debounce: { default: 800, blur: 0 } }" name="username" type="text" placeholder="username">
+				</label>
 				<label>Email
-					<input ng-model="user.Email" name="email" type="text" placeholder="xyz@gmahoo.com">
+					<input ng-model="user.Email" ng-model-options="{ updateOn: 'default blur', debounce: { default: 800, blur: 0 } }" name="email" type="email" placeholder="xyz@gmahoo.com">
+				</label>
+				<label>Telephone
+					<input ng-model="user.Telephone" ng-model-options="{ updateOn: 'default blur', debounce: { default: 800, blur: 0 } }" name="telephone" type="text" placeholder="0711223344">
 				</label>
 				<label>First Name
 					<input ng-model="user.FirstName" name="firstname" type="text" placeholder="John">
@@ -20,9 +30,10 @@
 					<input ng-model="user.LastName" name="lastname" type="text" placeholder="Deere">
 				</label>
 				<label>National ID
-					<input ng-model="user.NationalID" name="nationalid" type="text" placeholder="12345678">
+					<input ng-model="user.NationalID" ng-model-options="{ updateOn: 'default blur', debounce: { default: 800, blur: 0 } }" name="nationalid" type="text" placeholder="12345678">
 				</label>
-
+				<input ng-disabled="{[ !user.formValid ]}" class="button primary expanded radius" type="submit" value="Register">
+				<div class=" text-center text-spaced login-notice">Head over to <a class="register-link warning" href="/login">login</a> instead?</div>
 			</div>
 		</div>
 	</form>
