@@ -3,7 +3,7 @@
 <div class="container-wide" ng-controller="adminHomeCTRL">
 
 	<div class="row">
-		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | admin</strong> <span class="underline"></span></div>
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
 	</div>
 	<!-- Will display error/success messages -->
 	<div class="row">
@@ -18,7 +18,7 @@
 	</div>
 
 	<div class="row">
-		<div class="columns medium-3">
+		<div class="columns medium-3" id="sidebar-left">
 			<!-- Displays all reistered users-->
 			<!-- Tab links -->
 			<ul class="tabs" data-tabs id="users-tabs">
@@ -39,13 +39,13 @@
 					<ul>
 						<li ng-repeat=" (Username, NationalID) in users.verified"> {[ Username + " -- " + NationalID ]}</li>
 					</ul>
-					<a href="/admin_registered_users" class="float-right">More ...</a>
+					<a href="/users/verified/" class="float-right">More ...</a>
 				</div>
 				<div class="tabs-panel" id="panel2">
 					<ul>
 						<li ng-repeat=" (Username, NationalID) in users.pending"> {[ Username + " -- " + NationalID ]}</li>
 					</ul>
-					<a href="/admin_pending_users" class="float-right">More ...</a>
+					<a href="/users/pending/" class="float-right">More ...</a>
 				</div>
 			</div>
 

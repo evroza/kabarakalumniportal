@@ -1,0 +1,56 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="container-wide" ng-controller="eventsCTRL">
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+	</div>
+	<div class="row filters-subnav">
+		<div class="columns medium-12">
+			<div class="float-left">
+				<ul class="menu">
+					<li><a href="#" class="secondary label radius">All</a></li>
+					<li><a href="#">Recent</a></li>
+					<li><a href="#">Jobs</a></li>
+					<li><a href="#">Fundraisers</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- Will display error/success messages -->
+	<div class="row">
+		<div class="colums medium-12">
+			<div ng-show="user.message.display" ng-class="user.message.type" class="callout radius" data-closable>
+				<p ng-bind="user.message.content"></p>
+				<button ng-click="toggleAlert()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Will be used to display discussions -->
+	<div class="panels discusions">
+		<div class="row">
+			<div class="columns medium-12">
+				<!-- A panel -->
+				<div class="panel" id="discussions-main">
+					<div class="title text-center">
+						<h3>Events</h3></div>
+					<div class="content">
+
+						<ol class="events-long-list">
+							<li ng-repeat="event in events | limitTo:15" id="discussion-{[event[2]]}">
+								<a ng-bind="event[3]" href="/single_event/{[event[1]]}"></a> by <span>{[event[0] + " - " + event[7]]}</span> {[" -- " + event[4] | limitTextLong]}</li>
+						</ol>
+					</div>
+				</div>
+				<!-- /End panel -->
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

@@ -461,6 +461,94 @@ kabarakApp.factory("userData", ["$http", "$q", function ($http, $q) {
 				reject(response)
 			});
 		})
+		, getUsersData: function (data) {
+			// Currently don't have time to enforce the filters will implement later for now just fetch all users
+			return $q(function (resolve, reject) {
+				// Fetches last 10 registered users
+				$http({
+					method: "GET"
+					, url: "/get_users_data/all"
+					, headers: {
+						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
+		, approveUser: function (data) {
+			// Approves user registration request
+			return $q(function (resolve, reject) {
+				// Fetches last 10 registered users
+				$http({
+					method: "GET"
+					, url: "/approve_user/" + data
+					, headers: {
+						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
+		, getDiscussions: function (discussion_id) {
+			return $q(function (resolve, reject) {
+				// Fetches discussions from server
+				$http({
+					method: "GET"
+					, url: "/get_discussions/" + discussion_id
+					, headers: {
+						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
+		, getEvents: function (event_id) {
+			return $q(function (resolve, reject) {
+				// Fetches discussions from server
+				$http({
+					method: "GET"
+					, url: "/get_events/" + event_id
+					, headers: {
+						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
+		, rejectUser: function (data) {
+			// Rejects a users registration request
+			return $q(function (resolve, reject) {
+				// Fetches last 10 registered users
+				$http({
+					method: "GET"
+					, url: "/reject_user/" + data
+					, headers: {
+						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
 
 	};
 
@@ -473,6 +561,12 @@ kabarakApp.filter("limitText", function () {
 		return text.substr(0, 60) + " ...";
 	}
 });
+kabarakApp.filter("limitTextLong", function () {
+	//Limits the text to be shown for large text
+	return function (text) {
+		return text.substr(0, 120) + " ...";
+	}
+});
 
 
 
@@ -480,7 +574,6 @@ kabarakApp.filter("limitText", function () {
 kabarakApp.controller("adminHomeCTRL", ["$scope", "userData", function ($scope, userData) {
 	$scope.user = {
 		Username: ""
-		, Firstname: ""
 		, message: {
 			display: false
 			, type: "alert"
@@ -563,4 +656,292 @@ kabarakApp.controller("adminHomeCTRL", ["$scope", "userData", function ($scope, 
 
 
 
+}]);
+
+
+kabarakApp.controller("adminUsersCTRL", ["$scope", "$window", "userData", function ($scope, $window, userData) {
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	$scope.users = {
+		all: []
+	};
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	$scope.users.approve_user = function (user_id) {
+		userData.approveUser(user_id).then(function success(response) {
+			$scope.user.message = {
+					display: true
+					, type: "success"
+					, content: "User ID: " + user_id + "  VERIFIED successfully!"
+				}
+				// Update UI
+			$('tbody span#status-' + user_id).removeClass("secondary").addClass("success");
+		}, function failure(response) {
+			$scope.user.message = {
+				display: true
+				, type: "alert"
+				, content: "Failed! User ID: " + user_id + "  wasn't approved!"
+			}
+		});
+	};
+
+	$scope.users.reject_user = function (user_id) {
+		userData.rejectUser(user_id).then(function success(response) {
+			$scope.user.message = {
+					display: true
+					, type: "warning"
+					, content: "User ID: " + user_id + "  has been denied access!"
+				}
+				// Update UI
+			$('tbody span#status-' + user_id).removeClass("success").addClass("secondary");
+		}, function failure(response) {
+			$scope.user.message = {
+				display: true
+				, type: "alert"
+				, content: "Failed! Access of User ID: " + user_id + " couldn't be revoked!"
+			}
+		});
+	};
+
+
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+
+	filter = $window.location.pathname.split("/")[1]
+	userData.getUsersData("pending").then(function success(response) {
+		// Currently don't have time to enforce the filters will implement later for now just fetch all users
+		for (user in response.data) {
+			$scope.users.all[user] = response.data[user];
+		}
+		$scope.users.all.forEach(function (user) {
+			// Truncate registration status
+			user[10] = user[10].substr(0, 3).toUpperCase();
+			// is Verified?
+			if (user[10] === "VER") {
+				user.push(false);
+			} else {
+				user.push(true);
+			}
+
+		});
+		//Style the registration status badges
+		setTimeout(function () {
+			$("tbody td .badge:contains('VER')").addClass("success");
+			$("tbody td .badge:contains('PEN')").addClass("warning");
+		}, 500);
+		console.log($scope.users)
+	}, function failure(response) {
+		console.error("Error! Couldn't fetch users.");
+		$scope.user.message = {
+			display: true
+			, type: "alert"
+			, content: "Error! Couldn't fetch users. Please try again later!"
+		};
+	});
+
+
+
+
+}]);
+
+
+kabarakApp.controller("dicussionsCTRL", ["$scope", "$window", "userData", function ($scope, $window, userData) {
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	$scope.discussions = [];
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+	if ($window.location.pathname === "/discussions") {
+		userData.getDiscussions("all").then(function success(response) {
+			for (discussion in response.data) {
+				$scope.discussions[discussion] = response.data[discussion];
+			}
+			console.warn($scope.discussions);
+		}, function failure(response) {
+			//Show error message
+			$scope.toggleAlert();
+
+		});
+	}
+
+
+
+
+
+}]);
+
+
+
+kabarakApp.controller("eventsCTRL", ["$scope", "$window", "userData", function ($scope, $window, userData) {
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	$scope.events = [];
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+
+	if ($window.location.pathname === "/events") {
+		//fetch all events
+		userData.getEvents("all").then(function success(response) {
+			for (event in response.data) {
+				$scope.events[event] = response.data[event];
+			}
+			console.warn($scope.events);
+		}, function failure(response) {
+			//Show error message
+			$scope.toggleAlert();
+
+		});
+	}
+
+
+}]);
+
+kabarakApp.controller("singleDiscussionCTRL", ["$scope", "$window", "userData", function ($scope, $window, userData) {
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	$scope.discussion = [];
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+		console.warn($scope.user)
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+	
+	var locationData = $window.location.pathname.split("/")[2];
+	if (Number.parseInt(locationData) !== NaN) {
+		// It's a number !
+		userData.getDiscussions(locationData).then(function success(response) {
+			for (detail in response.data) {
+				$scope.discussion[detail] = response.data[detail];
+			}
+			console.warn($scope.discussion);
+		}, function failure(response) {
+			//Show error message
+			$scope.toggleAlert();
+
+		});
+	}
+	
+}]);
+
+
+
+kabarakApp.controller("singleEventCTRL", ["$scope", "$window", "userData", function ($scope, $window, userData) {
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	$scope.event = [];
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+		console.warn($scope.user)
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+	
+	
+	var locationData = $window.location.pathname.split("/")[2];
+	if (Number.parseInt(locationData) !== NaN) {
+		// It's a number !
+		userData.getEvents(locationData).then(function success(response) {
+			for (detail in response.data) {
+				$scope.event[detail] = response.data[detail];
+			}
+			console.warn($scope.event);
+		}, function failure(response) {
+			//Show error message
+			$scope.toggleAlert();
+
+		});
+	}
 }]);

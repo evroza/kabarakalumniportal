@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+
+.<div class="container" ng-controller="singleDiscussionCTRL">
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+	</div>
+	
+	<div class="row">
+		<columns class="medium-12">
+			<div id="single-discussion-title"><h1>{[ discussion[0][5] ]} <small>by <strong>{[discussion[0][0] ]} </strong> on {[ discussion[0][7] ]}</small></h1></div>
+			<div id="single-discussion-content">{[ discussion[0][6] ]}</div>
+		</columns>
+	</div>
+	
+</div>
+
+{% endblock %}

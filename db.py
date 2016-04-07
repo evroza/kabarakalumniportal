@@ -30,7 +30,7 @@ class DB(object):
         lookup_name = "Username" if username else "Email" if email else "NationalID"
 
         cursor = DB.instance.connection.cursor()
-        query = "SELECT * FROM users WHERE {} = '{}'".format(lookup_name,lookup)
+        query = "SELECT users.*, usertypes.Name as UserType FROM users INNER JOIN usertypes ON (users.UserTypes_idUserTypes=usertypes.idUserTypes) WHERE {} = '{}'".format(lookup_name,lookup)
         cursor.execute(query)
 
         return cursor.fetchall()
@@ -140,9 +140,83 @@ class DB(object):
         cursor.execute(query)
         return cursor.fetchall()
 
+    def get_users(self, RegistrationStatus=None, userTypeName=None):
+        """
+        Returns all users by default. If filters set then only users in defined categories
+        :param RegistrationStatus: filter for WHERE clause
+        :param userTypeName: filter for WHERE clause
+        :return:
+        """
+        if RegistrationStatus is None and userTypeName is None:
+            query = "SELECT usertypes.Name AS userTypeName, users.* FROM usertypes INNER JOIN users ON (usertypes.idUserTypes = users.UserTypes_idUserTypes) LIMIT 50"
+        elif RegistrationStatus is not None and userTypeName is not None:
+            query = "SELECT usertypes.Name AS userTypeName, users.* FROM usertypes INNER JOIN users ON (usertypes.idUserTypes = users.UserTypes_idUserTypes) WHERE RegistrationStatus = '{}' AND usertypes.Name = '{}' LIMIT 50".format(RegistrationStatus, userTypeName)
+        else:
+            # Only one is none - determine which one and use it as search criteria
+            search_name = "RegistrationStatus" if RegistrationStatus else "usertypes.Name"
+            search_text = RegistrationStatus if RegistrationStatus else userTypeName
+            query = "SELECT usertypes.Name AS userTypeName, users.* FROM usertypes INNER JOIN users ON (usertypes.idUserTypes = users.UserTypes_idUserTypes) WHERE {} = '{}' LIMIT 50".format(search_name, search_text)
 
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
 
+    def verify_user(self, user_email, default_password):
+        """
+        Verifies user and sets default password to 1234 ( hashed )
+        :param user_email:
+        :return:
+        """
+        query = "UPDATE users SET password='{}', RegistrationStatus='Verified', DateVerified=NOW() WHERE Email = '{}'".format(default_password, user_email)
+        print query
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        DB.instance.connection.commit()
+        return cursor.lastrowid
 
+    def unverify_user(self, user_email, default_password):
+        """
+        Verifies user and sets default password to 1234 ( hashed )
+        :param user_id:
+        :return:
+        """
+        query = "UPDATE users SET password='{}', RegistrationStatus='Pending', DateVerified='00-00-00 00:00' WHERE Email = '{}'".format(default_password, user_email)
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        DB.instance.connection.commit()
+        return cursor.lastrowid
+
+    def get_discussions(self, discussion_id=None, limit=15):
+        """
+        Fetches discussions
+        :param limit:
+        :return:
+        """
+        if discussion_id and discussion_id.isdecimal():
+            query = "SELECT users.Username AS poster, discusiontags.Name,discussions.*  FROM discussions INNER JOIN (users, discusiontags) ON (users.idUsers= discussions.Users_idUsers AND discusiontags.idDiscusionTags=discussions.DiscusionTags_idDiscusionTags) WHERE discussions.idDiscussions={} LIMIT {}".format(discussion_id, limit)
+        else:
+            query = "SELECT users.Username AS poster, discusiontags.Name,discussions.*  FROM discussions INNER JOIN (users, discusiontags) ON (users.idUsers= discussions.Users_idUsers AND discusiontags.idDiscusionTags=discussions.DiscusionTags_idDiscusionTags) LIMIT {}".format(limit)
+
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    def get_events(self, event_id=None, limit=15):
+        """
+        Fetches all events by default if no id set otherwise a single event
+        :param event_id: all: All events; an integer: specified
+        :return:
+        """
+        if event_id and event_id.isdecimal():
+            # event id has been provided
+            query = "SELECT users.Username AS Creator, events.* FROM events INNER JOIN users ON (events.Users_idUsers = users.idUsers) WHERE idEvents={} LIMIT {}".format(event_id, limit)
+        else:
+            # fetch all events instead
+            query = "SELECT users.Username AS Creator, events.* FROM events INNER JOIN users ON (events.Users_idUsers = users.idUsers) LIMIT {}".format(limit)
+
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
 
 
 

@@ -3,7 +3,7 @@
 
 <div class="container-wide" ng-controller="adminUsersCTRL">
 	<div class="row">
-		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | admin</strong> <span class="underline"></span></div>
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
 	</div>
 	<div class="row filters-subnav">
 		<div class="columns medium-6">
@@ -62,8 +62,8 @@
 						<td>{[user[6]]}</td>
 						<td>{[user[7]]}</td>
 						<td>{[user[11]]}</td>
-						<td><span class="approve" id="approve-{[user[1]]}" ng-click="users.approve_user(user[1])" ng-if="user[13]">&#10004;</span>
-						  <span class="reject" id="reject-{[user[1]]}" ng-click="users.reject_user(user[1])">&#10006;</span></td>
+						<td><span class="approve" id="approve-{[user[1]]}" ng-click="users.approve_user(user[7])" ng-if="user[13]">&#10004;</span>
+						  <span class="reject" id="reject-{[user[1]]}" ng-click="users.reject_user(user[7])">&#10006;</span></td>
 					</tr>
 				</tbody>
 			</table>

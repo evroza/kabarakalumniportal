@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+
+.<div class="container" ng-controller="singleEventCTRL">
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+	</div>
+	
+	<div class="row">
+		<columns class="medium-12">
+			<div id="single-event-title"><h1>{[ event[0][3] ]} <small>by <strong>{[event[0][0] ]} </strong> on {[ event[0][7] ]}</small></h1></div>
+			<div id="single-event-content">{[ event[0][4] ]}</div>
+		</columns>
+	</div>
+	
+</div>
+
+{% endblock %}
