@@ -1,0 +1,78 @@
+{% extends "layout.html" %} {% block body %}
+
+
+<div class="container-wide" ng-controller="adminUsersCTRL">
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | admin</strong> <span class="underline"></span></div>
+	</div>
+	<div class="row filters-subnav">
+		<div class="columns medium-6">
+			<div class="float-left">
+				<ul class="menu">
+					<li><a href="#" class="secondary label radius">All</a></li>
+					<li><a href="#">Verified</a></li>
+					<li><a href="#">Pending</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="columns medium-6">
+			<div class="float-right">
+				<ul class="menu">
+					<li><a href="#" class="secondary label radius">All</a></li>
+					<li><a href="#">Admins</a></li>
+					<li><a href="#">Alumni</a></li>
+					<li><a href="#">Event Managers</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- Will display error/success messages -->
+	<div class="row">
+		<div class="colums medium-12">
+			<div ng-show="user.message.display" ng-class="user.message.type" class="callout radius" data-closable>
+				<p ng-bind="user.message.content"></p>
+				<button ng-click="toggleAlert()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Start users details table -->
+	<div class="row">
+		<div class="columns small-12">
+			<table class="hover stack">
+				<thead>
+					<tr>
+						<th width="200">Username</th>
+						<th width="400">Full Name</th>
+						<th width="150">National ID</th>
+						<th width="150">Telephone</th>
+						<th width="300">Email</th>
+						<th>Registered</th>
+						<th width="150">Actions</th>						
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="user in users.all">
+						<td>{[ user[0] ]}</td>
+						<td><span class="badge secondary" id="status-{[user[1]]}">{[user[10]]}</span> {[ user[4] + " " + user[5]]}</td>
+						<td>{[user[3]]}</td>
+						<td>{[user[6]]}</td>
+						<td>{[user[7]]}</td>
+						<td>{[user[11]]}</td>
+						<td><span class="approve" id="approve-{[user[1]]}" ng-click="users.approve_user(user[1])" ng-if="user[13]">&#10004;</span>
+						  <span class="reject" id="reject-{[user[1]]}" ng-click="users.reject_user(user[1])">&#10006;</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- End users details table -->
+
+
+</div>
+
+
+{% endblock %}
