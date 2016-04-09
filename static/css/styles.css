@@ -13,37 +13,39 @@
 }
 
 ol.discussions-long-list li,
-ol.events-long-list li{
-    margin: 0.5em 0.5em 0em 1em;
-	    font-family: sans-serif;
-    font-size: 1.15em;
+ol.events-long-list li {
+	margin: 0.5em 0.5em 0em 1em;
+	font-family: sans-serif;
+	font-size: 1.15em;
 }
 
-h1 small{
+h1 small {
 	font-size: 43%;
 }
+
 h1 small strong {
 	color: #777;
 }
 
 #single-discussion-title,
-#single-event-title{
+#single-event-title {
 	border-bottom: 1px solid #555;
 	margin: 1.5em 0em;
 	width: 100%;
 }
 
 #single-discussion-content,
-#single-event-content{
+#single-event-content {
 	padding-top: 1em;
 	font-size: 1.5em;
 	color: #555
 }
 
-.container-wide .row{
+.container-wide .row {
 	max-width: 100%;
 }
-#discussions-main{
+
+#discussions-main {
 	border-bottom: 0px;
 	min-height: 50em;
 }
@@ -124,22 +126,23 @@ h1 small strong {
 }
 
 table tbody span.approve,
-table tbody span.reject{
+table tbody span.reject {
 	font-weight: 800;
 	font-size: 1em;
 	margin-right: 1.5em;
 	cursor: pointer;
 	padding: 0.3em;
 }
-table tbody span.approve:hover{
+
+table tbody span.approve:hover {
 	background-color: #1D9A1B;
 	color: #FFFFFF
 }
-table tbody span.reject:hover{
+
+table tbody span.reject:hover {
 	background-color: #9A1B1B;
 	color: #FFFFFF
 }
-
 
 .form.register form label {
 	position: relative;
@@ -158,7 +161,7 @@ a[href="/logout"] {
 	margin-top: 0.5em;
 }
 
-.row table, 
+.row table,
 .row.filters-subnav {
 	margin-top: 0.5em;
 }
@@ -192,6 +195,33 @@ a[href="/logout"] {
 	}
 }
 
+.comments-all {
+	margin-top: 3em;
+	font-size: 1.2em;
+	font-family: cursive;
+}
+
+input[name="Title"] {
+	padding: 0.6em 0.5em 0.6em 0.3em;
+	font-size: 3.5em;
+	font-weight: 500;
+	border-radius: 5px;
+}
+
+form textarea {
+	font-size: 2em;
+	line-height: 1.2em;
+	border-radius: 5px;
+}
+
+#create-post {
+	background-color: #2DA56D;
+	white-space: nowrap;
+	font-size: .8rem;
+	position: relative;
+	color: #fefefe;
+}
+
 .tabs-title>a {
 	background-color: #3adb76;
 	color: black
@@ -204,6 +234,10 @@ a[href="/logout"] {
 
 .tabs-title.is-active {
 	background-color: #3adb76;
+}
+
+.title h3 {
+	text-transform: uppercase;
 }
 
 .tabs-content[data-tabs-content="users-tabs"] {
@@ -251,6 +285,6 @@ a[href="/logout"] {
 	font-weight: 700;
 }
 
-.panels .panel .content a{
+.panels .panel .content a {
 	text-transform: uppercase;
 }

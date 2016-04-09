@@ -497,6 +497,23 @@ kabarakApp.factory("userData", ["$http", "$q", function ($http, $q) {
 				});
 			})
 		}
+		, getDiscussionComments: function (post_id) {
+			return $q(function (resolve, reject) {
+				// Fetches last 10 registered users
+				$http({
+					method: "GET"
+					, url: "/get_discussion_comments/" + post_id
+					, headers: {
+						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
 		, getDiscussions: function (discussion_id) {
 			return $q(function (resolve, reject) {
 				// Fetches discussions from server
@@ -540,6 +557,44 @@ kabarakApp.factory("userData", ["$http", "$q", function ($http, $q) {
 					, url: "/reject_user/" + data
 					, headers: {
 						"Content-Type": "application/json"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
+		, createEvent: function (data) {
+			return $q(function (resolve, reject) {
+				// Fetches last 10 registered users
+				data["DateEvent"] = "2016-05-13 09:00:00";
+				$http({
+					method: "POST"
+					, url: "/create_event"
+					, data: data
+					, headers: {
+						"Content-Type": "x-www-form-urlencoded"
+					}
+
+				}).then(function success(response) {
+					resolve(response);
+				}, function failure(response) {
+					reject(response)
+				});
+			})
+		}
+		, createDiscussion: function (data) {
+			return $q(function (resolve, reject) {
+				// Fetches last 10 registered users
+				data["DateEvent"] = "2016-05-13 09:00:00";
+				$http({
+					method: "POST"
+					, url: "/create_discussion"
+					, data: data
+					, headers: {
+						"Content-Type": "x-www-form-urlencoded"
 					}
 
 				}).then(function success(response) {
@@ -881,7 +936,7 @@ kabarakApp.controller("singleDiscussionCTRL", ["$scope", "$window", "userData", 
 		$scope.toggleAlert();
 
 	});
-	
+
 	var locationData = $window.location.pathname.split("/")[2];
 	if (Number.parseInt(locationData) !== NaN) {
 		// It's a number !
@@ -896,7 +951,7 @@ kabarakApp.controller("singleDiscussionCTRL", ["$scope", "$window", "userData", 
 
 		});
 	}
-	
+
 }]);
 
 
@@ -928,8 +983,8 @@ kabarakApp.controller("singleEventCTRL", ["$scope", "$window", "userData", funct
 		$scope.toggleAlert();
 
 	});
-	
-	
+
+
 	var locationData = $window.location.pathname.split("/")[2];
 	if (Number.parseInt(locationData) !== NaN) {
 		// It's a number !
@@ -944,4 +999,161 @@ kabarakApp.controller("singleEventCTRL", ["$scope", "$window", "userData", funct
 
 		});
 	}
+}]);
+
+kabarakApp.controller("newDiscussionCTRL", ["$scope", "userData", function ($scope, userData) {
+
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	// Title, Content, DateEvent, Fundraiser, FundraiseAmount
+	$scope.discussion = {
+		Users_idUsers: ""
+		, DiscusionTags_idDiscusionTags: "1"
+		, Title: ""
+		, Content: ""
+	};
+	$scope.createDiscussion = function () {
+		if ($scope.discussion.Title.trim().length >= 3 && $scope.discussion.Content.trim().length) {
+			//Everything's fine - submit
+			userData.createDiscussion($scope.discussion).then(function (response) {
+				$scope.user.message = {
+					display: true
+					, type: "success"
+					, content: "Your dicussion has bee succesfully posted!"
+				};
+				console.warn(response.data);
+			}, function (response) {
+				console.warn(response.data);
+			});
+
+		}
+	};
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+		console.warn($scope.user)
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+
+
+
+
+}]);
+
+kabarakApp.controller("newEventCTRL", ["$scope", "userData", function ($scope, userData) {
+
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	// Title, Content, DateEvent, Fundraiser, FundraiseAmount
+	$scope.event = {
+		Title: ""
+		, Content: ""
+		, DateEvent: ""
+		, Fundraiser: ""
+		, FundraiseAmount: 0
+	};
+	$scope.createEvent = function () {
+		console.warn($scope.event);
+		if ($scope.event.Title.trim().length >= 3 && $scope.event.Content.trim().length >= 10 && $scope.event.Fundraiser.trim().length === 1) {
+			//Everything's fine - submit
+			userData.createEvent($scope.event).then(function (response) {
+				$scope.user.message = {
+					display: true
+					, type: "success"
+					, content: "Your dicussion has bee succesfully posted!"
+				};
+				console.warn(response.data);
+			}, function (response) {
+				console.warn(response.data);
+			});
+
+		}
+	};
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+		console.warn($scope.user)
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+
+
+}]);
+
+kabarakApp.controller("commentsDisplayCTRL", ["$scope", "userData", function ($scope, userData) {
+	$scope.user = {
+		Username: ""
+		, message: {
+			display: false
+			, type: "alert"
+			, content: "An unspecified error occured"
+		}
+	};
+	$scope.comments = [];
+	$scope.toggleAlert = function () {
+		if ($scope.user.message.display) {
+			$scope.user.message.display = !$scope.user.message.display;
+			$scope.user.message.content = "An unspecified error occured"
+		}
+	};
+	userData.getLoggedInDetails.then(function success(response) {
+		//Populates the details of the currently logged user
+		for (detail in response.data) {
+			$scope.user[detail] = response.data[detail];
+		}
+	}, function failure(response) {
+		//Show error message
+		$scope.toggleAlert();
+
+	});
+
+	var post_id;
+	setTimeout(function () {
+		post_id = $("input[type='hidden']").text();
+		userData.getDiscussionComments(post_id).then(function (response) {
+			for (comment in response.data) {
+				$scope.comments.push(response.data[comment]);
+			}
+			console.error($scope.comments);
+		}, function (response) {
+			console.error("nkt")
+		});
+	}, 1000);
+
+
+
+
 }]);

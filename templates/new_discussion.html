@@ -1,0 +1,41 @@
+{% extends "layout.html" %} {% block body %} .
+
+<div class="container" ng-controller="newDiscussionCTRL">
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+	</div>
+
+	<row id="create-discussion-form">
+		<div class="columns medium-12">
+			<!-- Users_idUsers, DiscusionTags_idDiscusionTags, Title, Content -->
+			<div class="form create-post">
+				<form method="post" ng-submit="createDiscussion()">
+					<div class="small-6 small-centered columns">
+						<h2 class="text-center">New Discussion</h2>
+						<label>TITLE
+							<input ng-model="discussion.Title" name="Title" type="text" placeholder="Title">
+						</label>
+						<label>CONTENT
+							<textarea ng-model="discussion.Content" name="Content" id="new-discussion-content" cols="30" rows="10"></textarea>
+						</label>
+						
+						<input class="button large expanded" type="submit">
+
+						<div ng-show="message.display" class="alert callout radius" data-closable>
+							<p ng-bind="message.content"></p>
+							<button ng-click="toggleAlert()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</row>
+
+
+</div>
+
+
+{% endblock %}

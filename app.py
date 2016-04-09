@@ -349,6 +349,78 @@ def get_last_registered_usernames():
     return json.jsonify(usernames)
 
 
+@app.route("/new_discussion")
+def new_discussion():
+    return render_template("new_discussion.html")
+
+
+@app.route("/create_discussion", methods=["POST"])
+def create_discussion():
+    """
+    Organizes form data and creates discussion
+    :return:
+    """
+    if is_logged_in():
+        if request.method == "POST":
+            if request.get_json(force=True)["Title"] and request.get_json(force=True)["Content"] and request.get_json(force=True)["DateEvent"]:
+                data = {}
+                data["Title"] = request.get_json(force=True)["Title"].strip()
+                data["Content"] = request.get_json(force=True)["Content"].strip()
+                data["DiscusionTags_idDiscusionTags"] = request.get_json(force=True)["DiscusionTags_idDiscusionTags"].strip()
+                data["Users_idUsers"] = session["idUsers"]
+
+                insert_id = db.insert_discussion(data)
+                return json.jsonify(success="Discussion was successfully created!", insert_id=insert_id)
+
+            else:
+                return json.jsonify(error="You must fill in all fields!")
+        else:
+            return json.jsonify(error="There is a problem with your request. You are sending GET \
+                                   instead of POST requests to this API.")
+
+@app.route("/get_discussion_comments/<post_id>")
+def get_discussion_commnets(post_id):
+    """
+    Returns all comments associated with a post
+    :param post_id:
+    :return:
+    """
+    comments = db.get_discussion_comments(post_id)
+    comments = list(enumerate(comments))
+    return json.jsonify(comments)
+
+@app.route("/new_event")
+def new_event():
+    return render_template("new_event.html")
+
+@app.route("/create_event", methods=["POST"])
+def create_event():
+    """
+    Organizes form data and creates event
+    :return:
+    """
+    if is_logged_in():
+        if request.method == "POST":
+            if request.get_json(force=True)["Title"] and request.get_json(force=True)["Content"] and request.get_json(force=True)["DateEvent"]:
+                data = {}
+                data["Title"] = request.get_json(force=True)["Title"].strip()
+                data["Content"] = request.get_json(force=True)["Content"].strip()
+                data["DateEvent"] = request.get_json(force=True)["DateEvent"].strip()
+                data["Fundraiser"] = request.get_json(force=True)["Fundraiser"]
+                data["FundraiseAmount"] = request.get_json(force=True)["FundraiseAmount"]
+                data["Users_idUsers"] = session["idUsers"]
+
+                insert_id = db.insert_event(data)
+                return json.jsonify(success="Event was successfully created!", insert_id=insert_id)
+
+            else:
+                return json.jsonify(error="You must fill in all fields!")
+        else:
+            return json.jsonify(error="There is a problem with your request. You are sending GET \
+                                   instead of POST requests to this API.")
+
+
+
 
 @app.route("/logout")
 def logout():

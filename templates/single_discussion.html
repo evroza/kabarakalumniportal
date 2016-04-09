@@ -1,18 +1,37 @@
-{% extends "layout.html" %}
-{% block body %}
+{% extends "layout.html" %} {% block body %} .
 
-.<div class="container" ng-controller="singleDiscussionCTRL">
-	<div class="row">
-		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+<div class="container">
+	<div ng-controller="singleDiscussionCTRL">
+		<div class="row">
+			<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+		</div>
+
+		<div class="row">
+			<columns class="medium-12">
+				<div id="single-discussion-title">
+					<h1>{[ discussion[0][5] ]} <small>by <strong>{[discussion[0][0] ]} </strong> on {[ discussion[0][7] ]}</small></h1></div>
+				<div id="single-discussion-content">{[ discussion[0][6] ]}</div>
+			</columns>
+			<input type="hidden" name="post_id" value="{[ discussion[0][2] ]}" ng-bind="discussion[0][2]">
+		</div>
 	</div>
-	
-	<div class="row">
-		<columns class="medium-12">
-			<div id="single-discussion-title"><h1>{[ discussion[0][5] ]} <small>by <strong>{[discussion[0][0] ]} </strong> on {[ discussion[0][7] ]}</small></h1></div>
-			<div id="single-discussion-content">{[ discussion[0][6] ]}</div>
-		</columns>
+	<div class="row" ng-controller="commentsDisplayCTRL">
+		<div class="columns-9 text-right">
+			<div class="comments-all">
+				<div class="comment" ng-repeat="comment in comments">
+				
+					<div class="row">
+						<div class="columns medium-2"><strong>{[ comment[0] ]}</strong></div>
+						<div class="columns medium-2">{[ comment[5] ]}</div>
+						<div class="columns medium-8">{[ comment[4] ]}</div>
+					</div>
+					
+				</div>				
+			</div>
+		</div>
 	</div>
-	
+
+
 </div>
 
 {% endblock %}

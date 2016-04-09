@@ -1,0 +1,55 @@
+{% extends "layout.html" %} {% block body %} .
+
+<div class="container" ng-controller="newEventCTRL">
+	<div class="row">
+		<div id="logged-in-details" class="columns medium-12 border-bottom text-center">You are logged in as: <strong> {[ user.Username ]} | {[user.UserType]}</strong> <span class="underline"></span></div>
+	</div>
+	<div ng-show="user.message.display" class="secondary callout radius" data-closable>
+		<p ng-bind="user.message.content"></p>
+		<button ng-click="toggleAlert()" class="close-button" aria-label="Dismiss alert" type="button" data-close>
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<row id="create-event-form">
+		<div class="columns medium-12">
+			<!-- Users_idUsers, DiscusionTags_idDiscusionTags, Title, Content -->
+			<div class="form create-post">
+				<form method="post" ng-submit="createEvent()">
+					<div class="small-6 small-centered columns">
+						<h2 class="text-center">New Event</h2>
+						<label>TITLE
+							<input ng-model="event.Title" name="Title" type="text" placeholder="Title">
+						</label>
+						<label>CONTENT
+							<textarea ng-model="event.Content" name="Content" id="new-event-content" cols="30" rows="10"></textarea>
+						</label>
+
+						<label>Date
+							<input ng-model="event.DateEvent" type="date" name="DateEvent" id="DateEvent">
+						</label>
+
+						<fieldset class="large-6 columns">
+							<legend>Is this a Fundraiser?</legend>
+							<input ng-model="event.Fundraiser" type="radio" name="Fundraiser" value="1" id="isFundraiser" required>
+							<label for="isFundraiser">Yes</label>
+							<input ng-model="event.Fundraiser" type="radio" name="Fundraiser" value="0" id="notFundraiser">
+							<label for="notFundraiser">No</label>
+						</fieldset>
+						{[event.Fundraiser + "weee"]}
+
+						<input class="button large expanded" type="submit">
+
+
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</row>
+
+
+</div>
+
+
+{% endblock %}

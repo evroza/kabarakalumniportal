@@ -218,6 +218,51 @@ class DB(object):
         cursor.execute(query)
         return cursor.fetchall()
 
+    def insert_event(self, data):
+        """
+        Inserts events to database
+        :param data: dict with insert details
+        :return: int insert id
+        """
+        query = "INSERT INTO events (Users_idUsers, Title, Content, DateEvent, Fundraiser, FundraiseAmount)" \
+               " VALUES('{}', '{}', '{}', '{}', {}," \
+               " {})".format(data["Users_idUsers"], data["Title"], data["Content"], data["DateEvent"], data["Fundraiser"], data["FundraiseAmount"])
+
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        DB.instance.connection.commit()
+        return cursor.lastrowid
+
+    def insert_discussion(self, data):
+        """
+        Inserts dicussions to database
+        :param data: dict with insert details
+        :return: int insert id
+        """
+        query = "INSERT INTO discussions (Users_idUsers, DiscusionTags_idDiscusionTags, Title, Content) VALUES ('{}', '{}', '{}', '{}')".format(data["Users_idUsers"], data["DiscusionTags_idDiscusionTags"], data["Title"], data["Content"])
+
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        DB.instance.connection.commit()
+        return cursor.lastrowid
+
+    def get_discussion_comments(self, post_id):
+        """
+        Fetches comments associated with a post
+        :return:
+        """
+        query = "SELECT  users.Username , discussionreplies.* FROM discussionreplies INNER JOIN users ON (discussionreplies.Users_idUsers=users.idUsers) WHERE Discussions_idDiscussions={}".format(post_id)
+        cursor = DB.instance.connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    def insert_comment(self, data):
+        pass
+
+
+
+
+
 
 
 
